@@ -1,0 +1,3 @@
+﻿  chessEngine.cpp
+C:\projects\chessengine\chessEngine.cpp(489): warning C4715: 'chessEngine::getKingPos': not all control paths return a value
+  chessengine.vcxproj -> C:\projects\chessengine\Debug\chessengine.lib
