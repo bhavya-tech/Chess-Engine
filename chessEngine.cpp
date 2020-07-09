@@ -123,44 +123,43 @@ int chessEngine::isCheckmate(int turn)
 	COORD check[9];
 	
 	for (int i = -1, ind = 0; i <= 1; i++)
-	{
 		for (int j = -1; j <= 1; j++, ind++)
-		{
-			check[ind].x = i + kingPos.x;
-			check[ind].y = j + kingPos.y;
-		}		
-	}
+			check[ind] = COORD(i + kingPos.x, j + kingPos.y);
+		
 	
-	// if any positions goes out of board mark its .x = -1
+	// if any positions goes out of board mark it (-1,-1)
 
 	for (int i = 0; i < 9; i++)
 		if (check[i].x < 1 || check[i].x > 8 || check[i].y < 1 || check[i].y > 8)
-			check[i].x = -1;
+			check[i] = COORD(-1,-1);
 
 	// mark pieces of same color blocking the possible escape
 	// possibility of bugs
-	for (int i = turn; i < turn + 16; i++)
+	for(int i = turn; i < turn + 16; i++)
 	{
-		if (pieces[i].coord.x == -1 || pieces[i].type == PC_KING)
+		COORD temp = pieces[i].coord;
+		if (temp.x == -1 || pieces[i].type == PC_KING)
 			continue;
 
-		cntAlivePiecesofTurn++;		// keep count of alive pieces to account for stalemate
+		// keep count of alive pieces to account for stalemate
+		cntAlivePiecesofTurn++;		
 
 		for (int j = 0; j < 9; j++)
-			if (pieces[i].coord.x == check[j].x && pieces[i].coord.y == check[j].y)
-				check[i].x = -1;
+			if (temp.x == check[j].x && temp.y == check[j].y)
+				check[j] = COORD(-1,-1);
 	}
 
 	// mark all the possible moves of opponent pieces on the check matrix
-	// possibility of bugs
 	for (int i = notTurn; i < notTurn + 16; i++)
 	{
-		if (pieces[i].coord.x == -1 || (pieces[i].type == PC_KING && pieces[i].type == turn))
+		PIECE temp = pieces[i];
+		if (temp.coord.x == -1 || (temp.type == PC_KING && temp.color == turn))
 			continue;
 
 		for (int j = 0; j < 9; j++)
-			if(!validMove(pieces[i],check[j]))
-				check[j].x = -1;
+			if(check[j].x != -1)
+				if(!validMove(temp,check[j]))
+					check[j] = COORD(-1,-1);
 	}
 
 	int blocked = 0;
@@ -172,7 +171,6 @@ int chessEngine::isCheckmate(int turn)
 	{
 	case 9:
 		return CK_CHECKMATE;
-
 	case 8:
 		if (check[5].x != -1 && cntAlivePiecesofTurn == 1)
 			return CK_STALEMATE;
@@ -315,16 +313,13 @@ int chessEngine::makeMove(COORD sourceCoord, COORD destCoord, MATRIX * ptrClient
 	else
 		notTurn = WHITE;
 
-	int check_condition_turn = 0;
-	int check_condition_not_turn = 0;
-	int valid = 0;
-	int saveTurn = 0;
-
 	PIECE * sourcePiece = getPieceByCoord(sourceCoord);
+
 	// check if piece exists
 	if (sourcePiece == nullptr)
 		return NO_PIECE;
 
+	// return message of not turn if the selected piece belongs to other player
 	if (sourcePiece->color != turn)
 		return NOT_TURN;
 
@@ -335,7 +330,8 @@ int chessEngine::makeMove(COORD sourceCoord, COORD destCoord, MATRIX * ptrClient
 		updateBoard();
 		updateClientMatrix(ptrClientMatrix);
 		return 0;
-	}	
+	}
+
 
 	// check if move is valid
 	int validMoveStatus = validMove(*sourcePiece, destCoord);
@@ -345,21 +341,21 @@ int chessEngine::makeMove(COORD sourceCoord, COORD destCoord, MATRIX * ptrClient
 	// execute move in internal board and pieces list
 	executeMove(sourcePiece, destCoord, turn);
 
-
 	// check if move causes self check
 	int checkConditionOfTurn = isCheckmate(turn);
-
+	
 	// if there is self check then reverse the move
-	reverseMove();
-
 	// return the corresponding error to the client
 	switch (checkConditionOfTurn)
 	{
 	case CK_CHECK:
+		reverseMove();
 		return ME_SELFCHECK;
 	case CK_CHECKMATE:
+		reverseMove();
 		return ME_SELFCHECKMATE;
 	case CK_STALEMATE:
+		reverseMove();
 		return ME_SELFSTALEMATE;
 	default:
 		break;
