@@ -207,7 +207,7 @@ int chessEngine::validMove(PIECE piece, COORD destCoord)
 		if (!(r.x == -r.y || r.x == r.y || r.x == 0 || r.y == 0))
 			return ME_INVALIDMOVE;
 
-		else if ((pathTracing(piece.coord, destCoord, PT_CROSS)) || (pathTracing(piece.coord, destCoord, PT_DIAG)))
+		if((abs(r.x) == abs(r.y) && pathTracing(piece.coord, destCoord, PT_DIAG)) || ((r.x == 0 || r.y == 0) && pathTracing(piece.coord, destCoord, PT_DIAG)))
 			return ME_BLOCKEDMOVE;
 
 		break;
