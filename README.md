@@ -36,7 +36,7 @@ Import it to your project and include the header ``` #include"chessEngine.h"```.
    ME_SELFCHECKMATE | Performed move causes checkmate to its own king
    ME_SELFSTALEMATE | Performed move causes stalemate to its own king
    
-   1. Warning Messages:
+   2. Warning Messages:
       _These messages are to display the next player_
       
    Message | Meaning
@@ -45,7 +45,7 @@ Import it to your project and include the header ``` #include"chessEngine.h"```.
    CK_CHECKMATE | Checkmate of the next player
    CK_STALEMATE | Stalemate of the next player
    
-   1. Other messages:
+   3. Other messages:
    
     Message | Meaning
    --------|-------
