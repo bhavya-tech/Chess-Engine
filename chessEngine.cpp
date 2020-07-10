@@ -22,6 +22,7 @@ void chessEngine::saveMove(PIECE sourcePiece, PIECE killPiece)
 	killedPiece = killPiece;
 }
 
+// May have bugs
 void chessEngine::reverseMove()
 {
 	// resotre killed piece
@@ -35,39 +36,38 @@ void chessEngine::reverseMove()
 			pieces[i] = movedPiece;
 }
 
-int chessEngine::gameSetup(int newGame, GAME game, MATRIX* ptrClientMatrix)
+int chessEngine::gameSetup(std::ifstream *gamedata, MATRIX* ptrClientMatrix)
 {
-	if (newGame)
+	char status;
+	*gamedata >> status;
+	if (status == 'C')
+	{
+		// load from file
+		*gamedata >> turn;
+
+		for (int i = 0; i < 32; i++)
+		{
+			*gamedata >> pieces[i].color;
+			*gamedata >> pieces[i].coord.x;
+			*gamedata >> pieces[i].coord.y;
+			*gamedata >> pieces[i].type;
+		}
+	}
+	else
 	{
 		// initialize new game
+
 		turn = WHITE;
 		initPieces();
 		updateBoard();
 		updateClientMatrix(ptrClientMatrix);
 		return 0;
 	}
-
-	// load from game object
-	turn = game.turn;
-
-	for (int i = 0; i < 32; i++)
-		pieces[i] = game.pieces[i];
-
+	
 	updateBoard();
 	updateClientMatrix(ptrClientMatrix);
 
 	return 0;
-}
-
-GAME chessEngine::gameExport()
-{
-	GAME game;
-	game.turn = turn;
-	
-	for (int i = 0; i < 32; i++)
-		game.pieces[i] = pieces[i];
-
-	return game;
 }
 
 void PIECE::setPiece(COORD coord, int type, int color)
@@ -86,6 +86,7 @@ void chessEngine::executeMove(PIECE * piecePtr, COORD destCoord, int notTurn)
 	else
 		index = 16;
 
+	// Kill piece at destiantion, if exists
 	for (int i = index; i < index + 16; i++)
 	{	
 		if (pieces[i].coord.x == destCoord.x && pieces[i].coord.y == destCoord.y)
@@ -126,15 +127,12 @@ int chessEngine::isCheckmate(int turn)
 		for (int j = -1; j <= 1; j++, ind++)
 			check[ind] = COORD(i + kingPos.x, j + kingPos.y);
 		
-	
 	// if any positions goes out of board mark it (-1,-1)
-
 	for (int i = 0; i < 9; i++)
 		if (check[i].x < 1 || check[i].x > 8 || check[i].y < 1 || check[i].y > 8)
 			check[i] = COORD(-1,-1);
 
 	// mark pieces of same color blocking the possible escape
-	// possibility of bugs
 	for(int i = turn; i < turn + 16; i++)
 	{
 		COORD temp = pieces[i].coord;
@@ -332,7 +330,6 @@ int chessEngine::makeMove(COORD sourceCoord, COORD destCoord, MATRIX * ptrClient
 		return 0;
 	}
 
-
 	// check if move is valid
 	int validMoveStatus = validMove(*sourcePiece, destCoord);
 	if (validMoveStatus)
@@ -368,7 +365,6 @@ int chessEngine::makeMove(COORD sourceCoord, COORD destCoord, MATRIX * ptrClient
 	if (sourcePiece->type == PC_PAWN)
 		if (sourcePiece->coord.y == 8 || sourcePiece->coord.y == 1)
 			return MISC_INPUTPROMOTETO;
-
 
 	//check if move gives check to opponent and return same notification
 	int checkConditionOfNotTurn = isCheckmate(notTurn);
@@ -487,6 +483,27 @@ COORD chessEngine::getKingPos(int turn)
 int chessEngine::getTurn()
 {
 	return turn;
+}
+
+int chessEngine::saveGame(std::ofstream *gamedata)
+{
+	*gamedata << 'C';
+	*gamedata << turn;
+	*gamedata << "\n";
+	
+	for (int i = 0; i < 32; i++)
+	{
+		*gamedata << pieces[i].color;
+		*gamedata << "\n";
+		*gamedata << pieces[i].coord.x;
+		*gamedata << "\n";
+		*gamedata << pieces[i].coord.y;
+		*gamedata << "\n";
+		*gamedata << pieces[i].type;
+		*gamedata << "\n";
+	}
+
+	return 0;
 }
 
 void chessEngine::updateClientMatrix(MATRIX* ptrClientMatrix)

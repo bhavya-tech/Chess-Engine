@@ -1,4 +1,7 @@
 #include <iostream>
+#include <string>
+#include<fstream>
+
 
 // Definations
 // pieces
@@ -105,12 +108,23 @@ public:
 
 class GAME
 {
-public:
+protected:
 	int turn = WHITE;
 	PIECE pieces[32];
+
+public:
+	void setTurn(int turn)
+	{
+		this->turn = turn;
+	}
+	void setPieces(PIECE pieces[])
+	{
+		for (int i = 0; i < 32; i++)
+			this->pieces[i] = pieces[i];
+	}
 };
 
-class chessEngine
+class chessEngine : protected GAME
 {
 private:
 	MATRIX board;
@@ -135,7 +149,7 @@ private:
 
 public:
 	int makeMove(COORD sourceCoord, COORD destCoord, MATRIX* ptrClientMatrix, int optionalArgs);
-	int gameSetup(int newGame, GAME game, MATRIX* ptrClientMatrix);
-	GAME gameExport();
+	int gameSetup(std::ifstream *gamedata, MATRIX* ptrClientMatrix);
 	int getTurn();
+	int saveGame(std::ofstream *gamedata);
 };
