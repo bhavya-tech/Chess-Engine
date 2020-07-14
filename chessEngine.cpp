@@ -240,25 +240,52 @@ int chessEngine::validMove(PIECE piece, COORD destCoord)
 		//exceptions may exist --- to be checked
 		if(piece.color == BLACK)
 		{
+			// Move in opposite direction
 			if(r.y > 0)
 				return ME_INVALIDMOVE;
+			// Move more than two steps in first move
 			if (piece.coord.y == POS_BLACKPAWNINIT && r.y < -2)
 				return ME_INVALIDMOVE;
+
+			// Move more than one step in next move
 			if (r.y < -1 && piece.coord.y != POS_BLACKPAWNINIT)
 				return ME_INVALIDMOVE;
-			if (!pieceExistsAtCoord(destCoord) && abs(r.x) == 1 && r.y < -1)
+
+			// Move more than two steps horizontal
+			if (abs(r.x) >= 2)
 				return ME_INVALIDMOVE;
+
+			// Making horizontal move if no opponent at destiantion
+			if (!pieceExistsAtCoord(destCoord) && abs(r.x) == 1)
+				return ME_INVALIDMOVE;
+
+			// Piece blocking forward move
+			if (pieceExistsAtCoord(destCoord) && r.x == 0)
+				return ME_BLOCKEDMOVE;
 		}
 		else
 		{
-			if(r.y<0)
+			// Move in opposite direction
+			if (r.y < 0)
 				return ME_INVALIDMOVE;
+			// Move more than two steps in first move
 			if (piece.coord.y == POS_WHITEPAWNINIT && r.y > 2)
 				return ME_INVALIDMOVE;
+			// Move more than one step in next move
 			if (r.y > 1 && piece.coord.y != POS_WHITEPAWNINIT)
 				return ME_INVALIDMOVE;
-			if (!pieceExistsAtCoord(destCoord) && abs(r.x) == 1 && r.y > 1)
+
+			// Move more than two steps horizontal
+			if (abs(r.x) >= 2)
 				return ME_INVALIDMOVE;
+
+			// Making horizontal move if no opponent at destiantion
+			if (!pieceExistsAtCoord(destCoord) && abs(r.x) == 1)
+				return ME_INVALIDMOVE;
+
+			// Piece blocking forward move
+			if (pieceExistsAtCoord(destCoord) && r.x == 0)
+				return ME_BLOCKEDMOVE;
 		}
 		break;
 	}

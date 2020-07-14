@@ -54,7 +54,6 @@
 #define PT_DIAG 0
 #define PT_CROSS 1
 
-
 class COORD
 {
 public:
