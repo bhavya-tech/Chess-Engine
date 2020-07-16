@@ -57,6 +57,8 @@ Import it to your project and include the header ```chessEngine.h``` to never wo
       To handle this message, take the input from the player to which piece it needs to promote. 
    
       Then again call the function with source and dest coords without setting any value, address to matrix (to update) and optionalArgs with the value of the piece to which it is to be promoted.
+1. To save the game, call the function ```int saveGame(std::ofstream *gamedata)``` with std::ofstream pointing at beginning of the file.(_Since this is test version, only .txt format is supported._)
+
       
       
 # Sample program:
