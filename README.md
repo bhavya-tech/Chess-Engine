@@ -5,15 +5,16 @@ Import it to your project and include the header ``` #include"chessEngine.h"```.
 ## How to use?
 
 1. Create object ```chessEngine```.
-1. Create a object of ```GAME``` .
 1. Create a object of ```MATRIX``` in which the output will be given from the library.
 
-    * _It is a 9x9 array in which 1x1 to 8x8 will represent the board._
+    * _It is a 9x9 array in which 1,1 to 8,8 will represent the board._
 
 1. Begin the game by initializing:
-    1. Start a new game:   Call the fuction ```gameSetup(int newGame, GAME game, MATRIX* ptrClientMatrix)``` and set first argument to non zero.
+
+    Call the fuction ```int gameSetup(std::ifstream *gamedata, MATRIX* ptrClientMatrix)``` and pass the pointer to std::ifstream which has the corresponding file open and points at the beginning of the file. (This is a test version so only .txt files are supported)
     
-    1. Load a game:   Call the fuction ```gameSetup(int newGame, GAME game, MATRIX* ptrClientMatrix)``` and set first argument to zero with game object having data exported from the ```gameExport()```.
+    1. To initiate a new game, the file should be empty.
+    1. To load the game, the ifstream should point at the beginning of where the ```saveGame()``` began to start writing.(_It is advisable to keep this file only for game data._)
     
 1. When user performs the move save the source and destination coordinates in the ```COORD``` object.
 
@@ -54,8 +55,6 @@ Import it to your project and include the header ``` #include"chessEngine.h"```.
       To handle this message, take the input from the player to which piece it needs to promote. 
    
       Then again call the function with source and dest coords without setting any value, address to matrix (to update) and optionalArgs with the value of the piece to which it is to be promoted.
-      
- To save the game for loading it later, make a object of ```GAME``` and store the object returned from ```gameExport()``` to it.
       
 # Bugs:
 
