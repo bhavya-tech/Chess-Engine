@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include<fstream>
+#include <fstream>
 
 
 // Definations
@@ -105,7 +105,7 @@ public:
 	}
 };
 
-class GAME
+/*class GAME
 {
 protected:
 	int turn = WHITE;
@@ -121,9 +121,9 @@ public:
 		for (int i = 0; i < 32; i++)
 			this->pieces[i] = pieces[i];
 	}
-};
+};*/
 
-class chessEngine : protected GAME
+class chessEngine
 {
 private:
 	MATRIX board;
