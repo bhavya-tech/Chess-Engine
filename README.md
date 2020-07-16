@@ -1,6 +1,6 @@
 # chessEngine
 
-Import it to your project and include the header ``` #include"chessEngine.h"```.
+Import it to your project and include the header ``` #include"chessEngine.h"``` to never worry about the chess backend logic.
 
 ## How to use?
 
@@ -55,6 +55,11 @@ Import it to your project and include the header ``` #include"chessEngine.h"```.
       To handle this message, take the input from the player to which piece it needs to promote. 
    
       Then again call the function with source and dest coords without setting any value, address to matrix (to update) and optionalArgs with the value of the piece to which it is to be promoted.
+      
+      
+# Sample program:
+A [sample program](https://github.com/bhavya-tech/chessConsoleClient) in the terminal is made for any reference to how to implement it into code.
+      
       
 # Bugs:
 
