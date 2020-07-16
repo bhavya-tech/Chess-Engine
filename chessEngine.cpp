@@ -56,17 +56,21 @@ int chessEngine::gameSetup(std::ifstream *gamedata, MATRIX* ptrClientMatrix)
 	else
 	{
 		// initialize new game
-
-		turn = WHITE;
-		initPieces();
-		updateBoard();
-		updateClientMatrix(ptrClientMatrix);
-		return 0;
+		return initGame(ptrClientMatrix);
 	}
 	
 	updateBoard();
 	updateClientMatrix(ptrClientMatrix);
 
+	return 0;
+}
+
+int chessEngine::initGame(MATRIX* ptrClientMatrix)
+{
+	turn = WHITE;
+	initPieces();
+	updateBoard();
+	updateClientMatrix(ptrClientMatrix);
 	return 0;
 }
 

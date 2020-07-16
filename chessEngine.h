@@ -149,6 +149,7 @@ private:
 public:
 	int makeMove(COORD sourceCoord, COORD destCoord, MATRIX* ptrClientMatrix, int optionalArgs);
 	int gameSetup(std::ifstream *gamedata, MATRIX* ptrClientMatrix);
+	int initGame(MATRIX* ptrClientMatrix);
 	int getTurn();
 	int saveGame(std::ofstream *gamedata);
 };
