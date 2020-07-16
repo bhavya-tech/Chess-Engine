@@ -1,6 +1,6 @@
 # chessEngine
 
-Import it to your project and include the header ``` #include"chessEngine.h"``` to never worry about the chess backend logic.
+Import it to your project and include the header ```chessEngine.h``` to never worry about the chess backend logic.
 
 ## How to use?
 
@@ -11,10 +11,12 @@ Import it to your project and include the header ``` #include"chessEngine.h"``` 
 
 1. Begin the game by initializing:
 
-    Call the fuction ```int gameSetup(std::ifstream *gamedata, MATRIX* ptrClientMatrix)``` and pass the pointer to std::ifstream which has the corresponding file open and points at the beginning of the file. (This is a test version so only .txt files are supported)
+    1. To start the game without any need to save it use ```int initGame(MATRIX* ptrClientMatrix)```.
+
+    1. Call the fuction ```int gameSetup(std::ifstream *gamedata, MATRIX* ptrClientMatrix)``` and pass the pointer to std::ifstream which has the corresponding file open and points at the beginning of the file. (This is a test version so only .txt files are supported)
     
-    1. To initiate a new game, the file should be empty.
-    1. To load the game, the ifstream should point at the beginning of where the ```saveGame()``` began to start writing.(_It is advisable to keep this file only for game data._)
+	    1. To initiate a new game, the file should be empty.
+	    1. To load the game, the ifstream should point at the beginning of where the ```saveGame()``` began to start writing.(_It is advisable to keep this file only for game data._)
     
 1. When user performs the move save the source and destination coordinates in the ```COORD``` object.
 
