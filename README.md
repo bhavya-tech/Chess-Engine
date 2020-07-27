@@ -2,8 +2,9 @@
 
 Import it to your project and include the header ```chessEngine.h``` to never worry about the chess backend logic.
 
-## How to use?
+# How to use?
 
+# Initiate the game:
 1. Create object ```chessEngine```.
 1. Create a object of ```MATRIX``` in which the output will be given from the library.
 
@@ -17,6 +18,8 @@ Import it to your project and include the header ```chessEngine.h``` to never wo
     
 	    1. To initiate a new game, the file should be empty.
 	    1. To load the game, the ifstream should point at the beginning of where the ```saveGame()``` began to start writing.(_It is advisable to keep this file only for game data._)
+	    
+## Play the game:
     
 1. When user performs the move save the source and destination coordinates in the ```COORD``` object.
 
@@ -54,20 +57,23 @@ Import it to your project and include the header ```chessEngine.h``` to never wo
    --------|-------
    MISC_INPUTPROMOTETO | Pawn of the player is to be promoted
    
-      To handle this message, take the input from the player to which piece it needs to promote. 
-   
-      Then again call the function with source and dest coords without setting any value, address to matrix (to update) and optionalArgs with the value of the piece to which it is to be promoted.
-1. To save the game, call the function ```int saveGame(std::ofstream *gamedata)``` with std::ofstream pointing at beginning of the file.(_Since this is test version, only .txt format is supported._)
+      To handle pormote message, take the input from the player to which piece it needs to promote. Then again call the function with source and dest coords without setting any value, address to matrix (to update) and optionalArgs with the value of the piece to which it is to be promoted.
 
-      
-      
+## Save the game:
+To save the game, call the function ```int saveGame(std::ofstream *gamedata)``` with std::ofstream pointing at beginning of the file.(_Since this is test version, only .txt format is supported._)
+
+## Undo move:
+Currently this feature is not porvided by the library. However, if developer needs to implement it then after each move save the game. When the user wants to undo, simply load the game at the previous move.(_This feature may be rolled out with with optimizations in further updates_) 
+
 # Sample program:
 A [sample program](https://github.com/bhavya-tech/chessConsoleClient) in the terminal is made for any reference to how to implement it into code.
       
       
 # Bugs:
 
-    -Stalemate and checkmate messages even when not
+ -Stalemate and checkmate messages even when not:
+ 
+The program identifies the check and checkmate conditions properly. However, it cannot be determine if any opponent piece can be killed or obstructed to prevent it. This is the reason why the game is not terminated at checkmate. _(An algorithm is currently being tested for the same. It will soon be implemented with an update.)_
  
 # Features left to program:
 
